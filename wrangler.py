@@ -65,19 +65,40 @@ def incomplete_check(df):
                 df[f'{column}'] = df[f'{column}'].fillna(0, inplace=True)
             else:
                 bad_lists.append(f"{column}")
+    print("") # spacer
 
 def outlier_check(df, column, median_multiplier=10):
     """This function checks for big/small outliers in the given (df, column), prints a readable result, then returns [[big_outliers], [small_outliers]]."""
     median = df[f"{column}"].median().__round__(2)
     
     big_outliers = [value for value in df[f"{column}"] if value > (median*median_multiplier)]
-    print(f"    Outliers {median_multiplier} times greater than the median {median}:\n{big_outliers}") if len(big_outliers) > 0 else print(f"No Big Outliers {median_multiplier} times greater than the median {median}.")
+    print(f"    Outliers {median_multiplier} times greater than the median {median}:\n{big_outliers}") if len(big_outliers) > 0 else print(f"    No Big Outliers {median_multiplier} times greater than the median {median}.")
     
     small_outliers = [value for value in df[f"{column}"] if value < (median/median_multiplier)]
-    print(f"    Outliers {median_multiplier} times smaller than the median {median}:\n{small_outliers}") if len(small_outliers) > 0 else print(f"No Small Outliers {median_multiplier} times smaller than the median {median}.")
+    print(f"    Outliers {median_multiplier} times smaller than the median {median}:\n{small_outliers}\n") if len(small_outliers) > 0 else print(f"    No Small Outliers {median_multiplier} times smaller than the median {median}.\n")
     return [big_outliers,small_outliers]
-    
-    
+
+def groupby_count_sum(df, group_by, sum_this=None):
+    """This function transforms the dataFrame into a DataFrameGroupBy object, grouped by the provided column name and counting repeats for each value, optionally with a sum of values for another column (grouped by the group_by column). Then prints a readable result and returns a list of lists, [[index],[count]] or [[index],[count],[summ]], where [0][0] and [1][0] and [2][0] are related index, count, summ."""
+    grouped_count = df.groupby(f"{group_by}")[f"{group_by}"].count()
+    # for group in grouped_count.index:
+    #     print(f"'{group}' has a total count of {grouped_count[group]}.")
+    index = [group for group in grouped_count.index]
+    count = [grouped_count[group] for group in grouped_count.index]
+    if sum_this == None:
+        for row in index:
+            print(f"After grouping by '{group_by}', '{row}' was counted {grouped_count[row]} times.")
+        print("") # spacer
+        return [index, count]
+    else:
+        grouped_sum = df.groupby(f"{group_by}", as_index=True)[f"{sum_this}"].sum()
+        # for group in grouped_sum.index:
+        #     print(f"'{group}' has a total sum of {grouped_sum[group]}.")
+        summ = [grouped_sum[group] for group in grouped_sum.index]
+        for row in index:
+            print(f"After grouping by '{group_by}', '{row}' was counted {grouped_count[row]} times and had a total sum of {grouped_sum[row]}")
+        print("") # spacer
+        return [index, count, summ]
     
     
 """This reads the CSV file using Pandas and saves it to a dataFrame object"""
@@ -87,13 +108,13 @@ df = pd.read_csv("San_Francisco_Arts_Commission_Grants_FY2004-2016.csv") # nrows
 # df.columns = new_header #set the header row as the df header
 
 """Step 1: Exploration"""
-# exploratory_info(df)
+exploratory_info(df)
 # print(df.dtypes)
 
 """Step 2: Select, Filter, Sort"""
-# subset = create_subset(df)
-# subset = alphabetize(subset)
-# maths = quick_maths(subset, "Grant Amount")
+subset = create_subset(df)
+subset = alphabetize(subset)
+maths = quick_maths(subset, "Grant Amount")
 
 """Step 3: Clean Data"""
 incomplete_check(df)
@@ -102,3 +123,6 @@ big_outlier_list, small_outlier_list = outlier_check(df, "Grant Amount", 12)
 # print(f"Big Outliers: {big_outlier_list}\nSmall Outliers: {small_outlier_list}") # Check to make sure returning correctly
 
 """Step 4: Transform Data"""
+groupby_count_sum(df, "Grant Category")
+groupby_count_sum(df, "Grant Category", "Grant Amount")
+groupby_count_sum(df, "Grant Fiscal Year", "Grant Amount")
