@@ -18,7 +18,7 @@ df = pd.read_csv("San_Francisco_Arts_Commission_Grants_FY2004-2016.csv") # nrows
 
 """Step 1: Exploration"""
 print("Step 1: Exploration")
-fn.exploratory_info(df)
+fn.try_or(lambda: fn.exploratory_info(df))
 # print(df.dtypes)
 print("/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\//\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/")
 print(" /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\//\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/")
@@ -27,9 +27,9 @@ print("/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\//\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\
 
 """Step 2: Select, Filter, Sort"""
 print("Step 2: Select, Filter, Sort")
-subset = fn.create_subset(df)
-subset = fn.alphabetize(subset)
-maths = fn.quick_maths(subset, "Grant Amount")
+subset = fn.try_or(lambda: fn.create_subset(df))
+subset = fn.try_or(lambda: fn.alphabetize(subset))
+maths = fn.try_or(lambda: fn.quick_maths(subset, "Grant Amount"))
 print("/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\//\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/")
 print(" /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\//\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/")
 print("/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\//\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\n")
@@ -37,9 +37,9 @@ print("/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\//\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\
 
 """Step 3: Clean Data"""
 print("Step 3: Clean Data")
-fn.incomplete_check(df)
+fn.try_or(lambda: fn.incomplete_check(df))
 # print(df.columns.tolist()) # Check to make sure column 'Community Focus: Women' was removed from the df
-big_outlier_list, small_outlier_list = fn.outlier_check(df, "Grant Amount", 12)
+big_outlier_list, small_outlier_list = fn.try_or(lambda: fn.outlier_check(df, "Grant Amount", 12))
 # print(f"Big Outliers: {big_outlier_list}\nSmall Outliers: {small_outlier_list}") # Check to make sure returning correctly
 print("/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\//\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/")
 print(" /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\//\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/")
@@ -48,6 +48,6 @@ print("/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\//\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\
 
 """Step 4: Transform Data"""
 print("Step 4: Transform Data")
-fn.groupby_count_sum(df, "Grant Category")
-fn.groupby_count_sum(df, "Grant Category", "Grant Amount")
-fn.groupby_count_sum(df, "Grant Fiscal Year", "Grant Amount")
+fn.try_or(lambda: fn.groupby_count_sum(df, "Grant Category"))
+fn.try_or(lambda: fn.groupby_count_sum(df, "Grant Category", "Grant Amount"))
+fn.try_or(lambda: fn.groupby_count_sum(df, "Grant Fiscal Year", "Grant Amount"))

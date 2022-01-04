@@ -1,6 +1,21 @@
 import numpy as np
 import pandas as pd
+import traceback
 
+def try_or(func, default=None, expected_exc=(Exception,)):
+    """This is a method that allows me to reduce the amount of try-except needed in my code, with the except always returning the error.
+    
+    (1) I was searching online for ways to shorten the try-except, and then (2) searched for how to catch the line where an error occurred but continue running through the code after that.
+    
+    SOURCE: (1) https://stackoverflow.com/a/56137232 & (2) https://stackoverflow.com/a/47659065"""
+    
+    try:
+        return func()
+    
+    except expected_exc:
+        print("-- RAN INTO AN ISSUE HERE! SEE THE ERROR BELOW:")
+        print(traceback.format_exc())
+        return default
 
 def exploratory_info(df):
     """Using pandas to print basic information about your dataset such as number of rows, averages for numeric columns, and any other useful explanatory information about your dataset."""
