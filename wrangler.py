@@ -1,7 +1,7 @@
 # Working on the exercise at https://ed.devmountain.com/materials/data-bp-1/exercises/data-wrangling/
 # Pulled a CSV file from https://data.sfgov.org/Culture-and-Recreation/San-Francisco-Arts-Commission-Grants-FY2004-2016/mxvq-mfs5
 
-# Code Review Feedback -- Good idea to break into functions, good for reusability, but want functions to run independent of each other. Can put them in a new file and import them into this file, as well as use try-except so that the rest of the code can run if a function runs into an error.
+# Feedback from Code Review at the bottom of this document.
 
 """"Exploratory Data Analysis"""
 import numpy as np
@@ -51,3 +51,8 @@ print("Step 4: Transform Data")
 fn.try_or(lambda: fn.groupby_count_sum(df, "Grant Category"))
 fn.try_or(lambda: fn.groupby_count_sum(df, "Grant Category", "Grant Amount"))
 fn.try_or(lambda: fn.groupby_count_sum(df, "Grant Fiscal Year", "Grant Amount"))
+
+# Code Review Feedback -- Good idea to break into functions, good for reusability, but want functions to run independent of each other. Can put them in a new file and import them into this file, as well as use try-except so that the rest of the code can run if a function runs into an error.
+# NOTE -- After putting functions in a separate file, was still stopping after running into an error. Maybe could have put each individual function in a separate file to fix that, but instead I created the try_or() function.
+
+# Code Review Feedback 2 -- I like this implementation, take it a bit further and push your errors to a db table. Think about creating a reusable variable around your print methods used to separate your output, in the same way you imported your functions. That way your errors are saved. What if this code was being run on a server? That's data lost. You can use the datetime module to log the type of error and the date it occurred.  For extra practice if you want.
