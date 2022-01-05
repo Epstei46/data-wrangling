@@ -110,3 +110,8 @@ def groupby_count_sum(df, group_by, sum_this=None):
             print(f"After grouping by '{group_by}', '{row}' was counted {grouped_count[row]} times and had a total sum of {grouped_sum[row]}")
         print("") # spacer
         return [index, count, summ]
+
+def spacer():
+    """Function used to insert 'spacer' lines between each Step in the homework."""
+    
+    print("/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\//\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\n /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\//\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\n/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\//\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\n")
